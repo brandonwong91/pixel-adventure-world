@@ -1,0 +1,7 @@
+{
+  "name": "Pixel World Adventure",
+  "description": "A dynamic text adventure game that generates a unique, explorable 2km x 2km pixelated world from a real-world image reference using Gemini and Imagen AI.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
