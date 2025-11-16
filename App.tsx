@@ -29,8 +29,13 @@ const App: React.FC = () => {
   const handleStartGame = useCallback(async (imageDataUrl: string) => {
     setGameState(prev => ({ ...prev, status: GameStatus.GENERATING, loadingMessage: 'Parsing your world...' }));
     try {
-      const mimeType = imageDataUrl.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/)?.[1];
-      const base64 = imageDataUrl.split(',')[1];
+      const isDataUrl = imageDataUrl.startsWith('data:');
+      const mimeType = isDataUrl ? imageDataUrl.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/)?.[1] : 'image/png';
+      const base64 = isDataUrl ? imageDataUrl.split(',')[1] : await fetch(imageDataUrl).then(r => r.blob()).then(b => new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve((reader.result as string).split(',')[1]);
+        reader.readAsDataURL(b);
+      }));
 
       if (!mimeType || !base64) {
         throw new Error('Invalid image data URL provided.');

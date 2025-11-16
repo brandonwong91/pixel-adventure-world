@@ -88,16 +88,6 @@ export const generateNextScene = async (history: string[], playerAction: string)
 
 export const generateLocationImage = async (prompt: string): Promise<string> => {
     const fullPrompt = `${prompt}, detailed pixel art, blocky, minecraft style, vibrant colors, 8-bit graphics, epic fantasy`;
-    const response = await ai.models.generateImages({
-        model: 'imagen-3.0-generate-002',
-        prompt: fullPrompt,
-        config: {
-          numberOfImages: 1,
-          outputMimeType: 'image/png',
-          aspectRatio: '16:9',
-        },
-    });
-
-    const base64ImageBytes = response.generatedImages[0].image.imageBytes;
-    return `data:image/png;base64,${base64ImageBytes}`;
+    const encodedPrompt = encodeURIComponent(fullPrompt);
+    return `https://image.pollinations.ai/prompt/${encodedPrompt}`;
 };
